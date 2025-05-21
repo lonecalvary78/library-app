@@ -8,6 +8,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
     env:
       REPOSITORY: ghcr.io  
       DOCKER_USERNAME: ${{ github.actor }}
