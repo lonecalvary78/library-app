@@ -78,23 +78,23 @@ app:
   openapi:
     info:
       title: Library Management API
-      description: A RESTful API for managing a library system, including books and borrowers
+      description: A RESTful API for managing a library application, including books and borrowers
       version: 1.0.0
-      terms-url: https://libraryapi.com/terms
+      terms-url: https://api.library.com/terms
       contact:
         name: Library API Team
-        email: support@libraryapi.com
-        url: https://libraryapi.com
+        email: support@library.com
+        url: https://api.library.com
       license:
         name: Apache 2.0
         url: https://www.apache.org/licenses/LICENSE-2.0
     external-docs:
       description: Library API Documentation
-      url: https://libraryapi.com/docs
+      url: https://api.library.com/docs
     servers:
       - url: http://localhost:8080
         description: Development Server
-      - url: https://api.libraryapi.com
+      - url: https://api.library.com
         description: Production Server
     tags:
       - name: Books
