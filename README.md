@@ -3,6 +3,7 @@
 [![unit-tests](https://github.com/lonecalvary78/library-app/actions/workflows/unit-tests.yaml/badge.svg)](https://github.com/lonecalvary78/library-app/actions/workflows/unit-tests.yaml)
 
 [![build-application](https://github.com/lonecalvary78/library-app/actions/workflows/build-application.yaml/badge.svg)](https://github.com/lonecalvary78/library-app/actions/workflows/build-application.yaml)
+
 A RESTful API that manages a simple library system
 
 ## Requirements
