@@ -1,0 +1,14 @@
+services:
+  library-app:
+    image: library-app:latest
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - DB_HOST=host.docker.internal
+      - DB_PORT=5432
+      - DB_NAME=library
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+
+

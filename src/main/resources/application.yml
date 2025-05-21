@@ -1,0 +1,105 @@
+# Default configuration
+spring:
+  application:
+    name: ${APPLICATION_NAME:library-service}
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}}
+    driver-class-name: ${SPRING_DATASOURCE_DRIVER:org.postgresql.Driver}
+    username: ${SPRING_DATASOURCE_USERNAME:${DB_USER}}
+    password: ${SPRING_DATASOURCE_PASSWORD:${DB_PASSWORD}}
+    hikari:
+      minimum-idle: ${HIKARI_MINIMUM_IDLE:5}
+      maximum-pool-size: ${HIKARI_MAXIMUM_POOL_SIZE:20}
+      idle-timeout: ${HIKARI_IDLE_TIMEOUT:30000}
+      pool-name: ${HIKARI_POOL_NAME:LibraryHikariCP}
+      max-lifetime: ${HIKARI_MAX_LIFETIME:2000000}
+      connection-timeout: ${HIKARI_CONNECTION_TIMEOUT:30000}
+  jpa:
+    database-platform: ${JPA_DATABASE_PLATFORM:org.hibernate.dialect.PostgreSQLDialect}
+    hibernate:
+      ddl-auto: ${JPA_HIBERNATE_DDL_AUTO:validate}
+    show-sql: ${JPA_SHOW_SQL:true}
+    properties:
+      hibernate:
+        format_sql: ${HIBERNATE_FORMAT_SQL:true}
+  flyway:
+    enabled: ${FLYWAY_ENABLED:true}
+    baseline-on-migrate: ${FLYWAY_BASELINE_ON_MIGRATE:true}
+    locations: ${FLYWAY_LOCATIONS:classpath:db/migration}
+
+# Server configuration
+server:
+  port: ${SERVER_PORT:8080}
+  shutdown: ${SERVER_SHUTDOWN:graceful}
+  tomcat:
+    connection-timeout: ${SERVER_CONNECTION_TIMEOUT:5s}
+
+# Actuator configuration for health checks and monitoring
+management:
+  endpoints:
+    web:
+      exposure:
+        include: ${ACTUATOR_ENDPOINTS:health,info,metrics}
+  endpoint:
+    health:
+      show-details: ${ACTUATOR_HEALTH_SHOW_DETAILS:always}
+    info:
+      enabled: true
+
+# Logging configuration
+logging:
+  pattern:
+    console: ${LOGGING_PATTERN_CONSOLE:%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n}
+    file: ${LOGGING_PATTERN_FILE:%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n}
+  level:
+    root: ${LOGGING_LEVEL_ROOT:INFO}
+    app:
+      library: ${LOGGING_LEVEL_APP:INFO}
+    org:
+      springframework: ${LOGGING_LEVEL_SPRING:INFO}
+      flywaydb: ${LOGGING_LEVEL_FLYWAY:INFO}
+      hibernate:
+        SQL: ${LOGGING_LEVEL_HIBERNATE_SQL:INFO}
+  file:
+    name: ${LOGGING_FILE_NAME:logs/library-service.log}
+
+# Springdoc OpenAPI configuration
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+    tagsSorter: alpha
+    disable-swagger-default-url: true
+
+# OpenAPI Documentation Configuration
+app:
+  openapi:
+    info:
+      title: Library Management API
+      description: A RESTful API for managing a library system, including books and borrowers
+      version: 1.0.0
+      terms-url: https://libraryapi.com/terms
+      contact:
+        name: Library API Team
+        email: support@libraryapi.com
+        url: https://libraryapi.com
+      license:
+        name: Apache 2.0
+        url: https://www.apache.org/licenses/LICENSE-2.0
+    external-docs:
+      description: Library API Documentation
+      url: https://libraryapi.com/docs
+    servers:
+      - url: http://localhost:8080
+        description: Development Server
+      - url: https://api.libraryapi.com
+        description: Production Server
+    tags:
+      - name: Books
+        description: Operations related to books management
+      - name: Borrowers
+        description: Operations related to borrowers management
+      - name: Loans
+        description: Operations related to book borrowing  
