@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       REPOSITORY: ghcr.io  
-      DOCKER_USERNAME: ${{ secrets.GITHUB_ACTOR }}
+      DOCKER_USERNAME: ${{ github.actor }}
       DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
