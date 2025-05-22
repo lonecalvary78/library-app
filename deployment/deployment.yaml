@@ -1,0 +1,61 @@
+apiversion: apps/v1
+kind: Deployment
+metadata:
+  name: library-app
+  namespace: library
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: library-app
+  template:
+    metadata:
+      labels:
+        app: library-app
+    spec:
+      imagePullPolicy: Always
+      imagePullSecrets:
+        - name: library-image-secret
+      containers:
+        - name: library-app
+          image: ghcr.io/lonecalvary78/library-app:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: JAVA_OPTS
+              value: "-Xms512m -Xmx1024m"
+            - name: SPRING_PROFILES_ACTIVE
+              value: "prod"
+            - name: DB_HOST
+              value: "library-db"
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_NAME
+              value: "library"
+            - name: DB_USER
+              value: "postgres"
+            - name: DB_PASSWORD
+              value: "postgres"
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 2048Mi
+            requests:
+              cpu: 500m
+              memory: 1024Mi              
