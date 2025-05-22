@@ -56,5 +56,5 @@ jobs:
                 fi
       - id: deploy-application
         run: |
-            kubectl apply -k deployment/kustomize.yaml
+            kubectl apply -k deployment
 
