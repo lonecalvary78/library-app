@@ -36,7 +36,7 @@ jobs:
                     --from-literal=port="${{ secrets.DB_PORT }}" \
                     --from-literal=database="${{ secrets.DB_NAME }}" \
                     --from-literal=username="${{ secrets.DB_USERNAME }}" \
-                    --from-literal=password="${{ secrets.DB_PASSWORD }}" \
+                    --from-literal=password="${{ secrets.DB_PASSWORD }}"
                 echo "Secret created successfully"
                 fi
       
