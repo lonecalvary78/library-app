@@ -1,0 +1,25 @@
+name: deploy-application
+
+on:
+   workflow_run:
+      workflows: ["build-application"]
+      types: [completed]
+
+jobs:
+  deploy-application:
+    runs-on: ubuntu-latest
+    steps:
+      - id: project-checkout
+        uses: actions/checkout@v4
+      - id: google-cloud-auth
+        uses: google-github-actions/auth@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+      - id: gke-get-authentication
+        uses: google-github-actions/get-gke-credentials@v2
+        with:
+           cluster_name: ${{ secrets.GKE_CLUSTER_NAME }}
+           location: ${{ secrets.GKE_LOCATION }}
+      - id: get-pods
+        run: kubectl get pods    
