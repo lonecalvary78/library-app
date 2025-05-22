@@ -4,8 +4,6 @@
 
 [![build-application](https://github.com/lonecalvary78/library-app/actions/workflows/build-application.yaml/badge.svg)](https://github.com/lonecalvary78/library-app/actions/workflows/build-application.yaml)
 
-[![deploy-application](https://github.com/lonecalvary78/library-app/actions/workflows/deploy-application.yaml/badge.svg)](https://github.com/lonecalvary78/library-app/actions/workflows/deploy-application.yaml)
-
 A RESTful API that manages a simple library system
 
 ## Requirements
