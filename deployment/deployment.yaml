@@ -4,6 +4,7 @@ metadata:
   name: library-app
 spec:
   replicas: 1
+  strategy:
   selector:
     matchLabels:
       app: library-app
@@ -52,8 +53,8 @@ spec:
                   key: password
           resources:
             requests:
-              cpu: 100m
-              memory: 128Mi
+              cpu: 500m
+              memory: 2048Mi
             limits:
-              cpu: 200m
-              memory: 256Mi
+              cpu: 1000m 
+              memory: 2048Mi
