@@ -19,9 +19,6 @@ jobs:
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
-          access_token_scopes: 'https://www.googleapis.com/auth/cloud-platform'
-          token_format: 'access_token'
       - id: gke-get-authentication
         uses: google-github-actions/get-gke-credentials@v2
         with:
