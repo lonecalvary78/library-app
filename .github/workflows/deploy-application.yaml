@@ -24,5 +24,34 @@ jobs:
         with:
            cluster_name: ${{ secrets.GKE_CLUSTER_NAME }}
            location: ${{ secrets.GKE_LOCATION }}
-      - id: get-pods
-        run: kubectl get pods    
+      - id: deploy-db-secret
+        run: |
+            SECRET_NAME="db-secret"
+            if kubectl get secret $SECRET_NAME  >/dev/null 2>&1; then
+                echo "Secret $SECRET_NAME already exists"
+                else
+                echo "Creating secret $SECRET_NAME"
+                kubectl create secret generic $SECRET_NAME \
+                    --from-literal=host="${{ secrets.DB_HOST }}" \
+                    --from-literal=port="${{ secrets.DB_PORT }}" \
+                    --from-literal=database="${{ secrets.DB_NAME }}" \
+                    --from-literal=username="${{ secrets.DB_USERNAME }}" \
+                    --from-literal=password="${{ secrets.DB_PASSWORD }}" \
+                echo "Secret created successfully"
+                fi
+      
+      - id: deploy-image-secret
+        run: |
+            IMAGE_SECRET_NAME="library-image-secret"
+            REPO_SERVER="https://ghcr.io"
+            if kubectl get secret $IMAGE_SECRET_NAME  >/dev/null 2>&1; then
+                echo "Secret $IMAGE_SECRET_NAME already exists"
+                else
+                echo "Creating secret $IMAGE_SECRET_NAME"
+                kubectl create secret docker-registry $IMAGE_SECRET_NAME \
+                    --docker-server=$REPO_SERVER \
+                    --docker-username="${{ github.actor }}" \
+                    --docker-password="${{ secrets.GITHUB_TOKEN }}"
+                echo "Secret created successfully"
+                fi
+
