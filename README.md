@@ -10,8 +10,8 @@ A RESTful API that manages a simple library system
 
 - Java 17 or higher
 - Maven 3.6 or higher
-- PostgreSQL 12 or higher
-- Docker (optional, for containerized deployment)
+- PostgreSQL 17
+- Docker
 
 ## Technologies Used
 
