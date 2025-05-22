@@ -15,6 +15,9 @@ spec:
       containers:
         - name: library-app
           image: ghcr.io/lonecalvary78/library-app:latest
+          imagePullPolicy: Always 
+          imagePullSecrets:
+            - name: library-image-secret
           ports:
             - containerPort: 8080
           env:
@@ -45,9 +48,6 @@ spec:
                 secretKeyRef:
                   name: db-secret
                   key: password
-          imagePullPolicy: Always
-          imagePullSecrets:
-            - name: library-image-secret
           resources:
             requests:
               cpu: 100m
@@ -55,5 +55,3 @@ spec:
             limits:
               cpu: 200m
               memory: 256Mi
-      imagePullSecrets:
-        - name: library-image-secret 
