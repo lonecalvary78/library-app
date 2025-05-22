@@ -23,6 +23,8 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: "dev"
+            - name: JAVA_OPTS
+              value: "-Xms512m -Xmx1024m"
             - name: DB_HOST
               valueFrom:
                 secretKeyRef:
