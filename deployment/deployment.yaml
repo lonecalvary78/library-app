@@ -12,12 +12,12 @@ spec:
       labels:
         app: library-app
     spec:
+      imagePullSecrets:
+        - name: library-image-secret
       containers:
         - name: library-app
           image: ghcr.io/lonecalvary78/library-app:latest
           imagePullPolicy: Always 
-          imagePullSecrets:
-            - name: library-image-secret
           ports:
             - containerPort: 8080
           env:
