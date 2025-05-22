@@ -54,4 +54,7 @@ jobs:
                     --docker-password="${{ secrets.GITHUB_TOKEN }}"
                 echo "Secret created successfully"
                 fi
+      - id: deploy-application
+        run: |
+            kubectl apply -k deployment/kustomize.yaml
 
