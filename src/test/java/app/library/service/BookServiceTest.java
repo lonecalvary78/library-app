@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -47,7 +48,6 @@ public class BookServiceTest {
 
     @BeforeEach
     void setUp() {
-        // Setup test data
         bookRequestDTO = new BookRequestDTO();
         bookRequestDTO.setTitle("Test Book");
         bookRequestDTO.setAuthor("Test Author");
@@ -61,8 +61,8 @@ public class BookServiceTest {
     }
 
     @Test
+    @DisplayName("Test create book success")
     void createBook_Success() {
-        // Given
         when(bookRepository.existsByIsbnAndTitleAndAuthor(
                 bookRequestDTO.getIsbn(),
                 bookRequestDTO.getTitle(),
@@ -70,10 +70,8 @@ public class BookServiceTest {
         when(bookRepository.findByIsbn(bookRequestDTO.getIsbn())).thenReturn(List.of());
         when(bookRepository.save(any(Book.class))).thenReturn(book);
 
-        // When
         BookResponseDTO result = bookService.createBook(bookRequestDTO);
 
-        // Then
         assertNotNull(result);
         assertEquals(1L, result.getId());
         assertEquals("Test Book", result.getTitle());
@@ -90,8 +88,8 @@ public class BookServiceTest {
     }
 
     @Test
+    @DisplayName("Test create book existing ISBN with different title or author")
     void createBook_ExistingISBNWithDifferentTitleOrAuthor() {
-        // Given
         Book existingBook = new Book();
         existingBook.setTitle("Different Title");
         existingBook.setAuthor("Test Author");
@@ -103,7 +101,6 @@ public class BookServiceTest {
                 bookRequestDTO.getAuthor())).thenReturn(false);
         when(bookRepository.findByIsbn(bookRequestDTO.getIsbn())).thenReturn(List.of(existingBook));
 
-        // When & Then
         assertThrows(ResourceAlreadyExistsException.class, () -> {
             bookService.createBook(bookRequestDTO);
         });
@@ -117,8 +114,8 @@ public class BookServiceTest {
     }
 
     @Test
+    @DisplayName("Test get all books")
     void getAllBooks_ReturnsAllBooks() {
-        // Given
         Book book1 = new Book();
         book1.setId(1L);
         book1.setTitle("Book 1");
@@ -133,10 +130,8 @@ public class BookServiceTest {
 
         when(bookRepository.findAll()).thenReturn(Arrays.asList(book1, book2));
 
-        // When
         List<BookResponseDTO> result = bookService.getAllBooks();
 
-        // Then
         assertNotNull(result);
         assertEquals(2, result.size());
         assertEquals("Book 1", result.get(0).getTitle());
@@ -146,14 +141,12 @@ public class BookServiceTest {
     }
 
     @Test
+    @DisplayName("Test get book by id existing id")
     void getBookById_ExistingId_ReturnsBook() {
-        // Given
         when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
 
-        // When
         BookResponseDTO result = bookService.getBookById(1L);
 
-        // Then
         assertNotNull(result);
         assertEquals(1L, result.getId());
         assertEquals("Test Book", result.getTitle());
@@ -162,11 +155,10 @@ public class BookServiceTest {
     }
 
     @Test
+    @DisplayName("Test get book by id non existing id")
     void getBookById_NonExistingId_ThrowsException() {
-        // Given
         when(bookRepository.findById(99L)).thenReturn(Optional.empty());
 
-        // When & Then
         assertThrows(ResourceNotFoundException.class, () -> {
             bookService.getBookById(99L);
         });

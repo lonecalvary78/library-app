@@ -37,13 +37,11 @@ public class BookControllerTest {
 
     @Test
     public void testCreateBook() throws Exception {
-        // Create request DTO
         BookRequestDTO requestDTO = new BookRequestDTO();
         requestDTO.setTitle("Test Book");
         requestDTO.setAuthor("Test Author");
         requestDTO.setIsbn("0306406152");
 
-        // Create response DTO
         BookResponseDTO responseDTO = new BookResponseDTO();
         responseDTO.setId(1L);
         responseDTO.setTitle("Test Book");
@@ -52,10 +50,8 @@ public class BookControllerTest {
         responseDTO.setBorrowed(false);
         responseDTO.setCreatedAt(Instant.now());
 
-        // Mock service method
         when(bookService.createBook(any(BookRequestDTO.class))).thenReturn(responseDTO);
 
-        // Perform request and validate response
         mockMvc.perform(post("/api/books")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestDTO)))
@@ -69,7 +65,6 @@ public class BookControllerTest {
 
     @Test
     public void testGetAllBooks() throws Exception {
-        // Create response DTOs
         BookResponseDTO book1 = new BookResponseDTO();
         book1.setId(1L);
         book1.setTitle("Book 1");
@@ -86,10 +81,8 @@ public class BookControllerTest {
         book2.setBorrowed(false);
         book2.setCreatedAt(Instant.now());
 
-        // Mock service method
         when(bookService.getAllBooks()).thenReturn(Arrays.asList(book1, book2));
 
-        // Perform request and validate response
         mockMvc.perform(get("/api/books")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

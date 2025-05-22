@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -22,6 +23,7 @@ class ISBNValidatorTest {
     }
 
     @ParameterizedTest
+    @DisplayName("Test valid ISBNs")
     @ValueSource(strings = {
         "0-306-40615-2",   // Valid ISBN-10 with hyphens
         "0306406152",      // Valid ISBN-10 without hyphens
@@ -34,9 +36,7 @@ class ISBNValidatorTest {
     void shouldValidateCorrectISBNs(String isbn) {
         boolean result = validator.isValid(isbn, context);
         
-        // For the failing test case
         if (!result) {
-            // Debug info to see why ISBN validation failed
             System.out.println("Failed ISBN: " + isbn);
             String cleanedISBN = isbn.replaceAll("[\\s-]", "");
             System.out.println("Cleaned ISBN: " + cleanedISBN);
@@ -46,13 +46,13 @@ class ISBNValidatorTest {
     }
 
     @Test
+    @DisplayName("Test specific problematic ISBN")
     void testSpecificProblematicISBN() {
         String isbn = "0-13-149505-0";
         String cleanedISBN = isbn.replaceAll("[\\s-]", "");
         System.out.println("Testing ISBN: " + isbn);
         System.out.println("Cleaned ISBN: " + cleanedISBN);
         
-        // Manual calculation of the checksum for ISBN-10
         int sum = 0;
         for (int i = 0; i < 9; i++) {
             int digit = Character.getNumericValue(cleanedISBN.charAt(i));
@@ -62,7 +62,6 @@ class ISBNValidatorTest {
             System.out.println("Digit " + i + ": " + digit + " × " + weight + " = " + contribution);
         }
         
-        // Check last character
         char lastChar = cleanedISBN.charAt(9);
         int lastValue = Character.getNumericValue(lastChar);
         sum += lastValue;
@@ -78,6 +77,7 @@ class ISBNValidatorTest {
     }
 
     @ParameterizedTest
+    @DisplayName("Test invalid ISBNs")
     @ValueSource(strings = {
         "0-306-40615-3",   // Invalid ISBN-10 check digit
         "0306406159",      // Invalid ISBN-10 check digit
@@ -89,13 +89,12 @@ class ISBNValidatorTest {
         "123456789X0"      // Invalid format with X not in last position
     })
     void shouldRejectInvalidISBNs(String isbn) {
-        // Then
         assertFalse(validator.isValid(isbn, context));
     }
 
     @Test
+    @DisplayName("Test null, empty, and whitespace values")
     void shouldAcceptNullOrEmptyValues() {
-        // Let @NotBlank handle these cases
         assertTrue(validator.isValid(null, context));
         assertTrue(validator.isValid("", context));
         assertTrue(validator.isValid("  ", context));

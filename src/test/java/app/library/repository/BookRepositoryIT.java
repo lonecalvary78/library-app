@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -26,7 +27,7 @@ import app.library.model.entity.Book;
 public class BookRepositoryIT {
 
     @Container
-    private static final PostgreSQLContainer<?> postgresContainer = new PostgreSQLContainer<>("postgres:14-alpine")
+    private static final PostgreSQLContainer<?> postgresContainer = new PostgreSQLContainer<>("postgres:17-alpine")
             .withDatabaseName("testdb")
             .withUsername("test")
             .withPassword("test");
@@ -43,8 +44,8 @@ public class BookRepositoryIT {
     private BookRepository bookRepository;
 
     @Test
+    @DisplayName("Test find by ISBN")
     void findByIsbn_ReturnsBookWithMatchingIsbn() {
-        // Given
         Book book1 = new Book();
         book1.setTitle("Test Book 1");
         book1.setAuthor("Test Author 1");
@@ -57,18 +58,16 @@ public class BookRepositoryIT {
         book2.setIsbn("0131495050");
         bookRepository.save(book2);
 
-        // When
         List<Book> result = bookRepository.findByIsbn("0306406152");
 
-        // Then
         assertEquals(1, result.size());
         assertEquals("Test Book 1", result.get(0).getTitle());
         assertEquals("Test Author 1", result.get(0).getAuthor());
     }
 
     @Test
+    @DisplayName("Test find by title containing ignore case")
     void findByTitleContainingIgnoreCase_ReturnsMatchingBooks() {
-        // Given
         Book book1 = new Book();
         book1.setTitle("Java Programming");
         book1.setAuthor("Author 1");
@@ -87,60 +86,52 @@ public class BookRepositoryIT {
         book3.setIsbn("0393040029");
         bookRepository.save(book3);
 
-        // When
         List<Book> result = bookRepository.findByTitleContainingIgnoreCase("java");
 
-        // Then
         assertEquals(2, result.size());
         assertTrue(result.stream().anyMatch(b -> b.getTitle().equals("Java Programming")));
         assertTrue(result.stream().anyMatch(b -> b.getTitle().equals("Advanced Java")));
     }
 
     @Test
+    @DisplayName("Test exists by ISBN and title and author")
     void existsByIsbnAndTitleAndAuthor_ReturnsTrueWhenExists() {
-        // Given
         Book book = new Book();
         book.setTitle("Test Book");
         book.setAuthor("Test Author");
         book.setIsbn("0306406152");
         bookRepository.save(book);
 
-        // When
         boolean exists = bookRepository.existsByIsbnAndTitleAndAuthor("0306406152", "Test Book", "Test Author");
 
-        // Then
         assertTrue(exists);
     }
 
     @Test
+
     void existsByIsbnAndTitleAndAuthor_ReturnsFalseWhenDoesNotExist() {
-        // Given
         Book book = new Book();
         book.setTitle("Test Book");
         book.setAuthor("Test Author");
         book.setIsbn("0306406152");
         bookRepository.save(book);
 
-        // When
         boolean exists = bookRepository.existsByIsbnAndTitleAndAuthor("0306406152", "Different Title", "Test Author");
 
-        // Then
         assertFalse(exists);
     }
 
     @Test
+    @DisplayName("Test find by id")
     void findById_ReturnsBookWithMatchingId() {
-        // Given
         Book book = new Book();
         book.setTitle("Test Book");
         book.setAuthor("Test Author");
         book.setIsbn("0306406152");
         Book savedBook = bookRepository.save(book);
 
-        // When
         Optional<Book> result = bookRepository.findById(savedBook.getId());
 
-        // Then
         assertTrue(result.isPresent());
         assertEquals("Test Book", result.get().getTitle());
         assertEquals("Test Author", result.get().getAuthor());
